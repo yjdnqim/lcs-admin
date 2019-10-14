@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS轻量级树形插件</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+</head>
+<body>
+//选择节点
+<div id="jstree_demo_div"></div>
+
+//显示选中的节点
+<div id="jstree_demo_div2"></div>
+
+
+
+</body>
+<script type="text/javascript">
+    // 选择的时候调用的方法
+    $('#jstree_demo_div').on("changed.jstree", function (e, data) {
+	    var i, j, r = [];
+		for(i = 0, j = data.selected.length; i < j; i++) {
+		  
+		  r.push(data.instance.get_node(data.selected[i]).id);
+		  r.push(data.instance.get_node(data.selected[i]).text);
+		  r.push(data.instance.get_node(data.selected[i]).parent);
+		  r.push(data.instance.get_node(data.selected[i]).state.selected);
+		}
+		alert("根据节点的点击事件_获取节点数据:"+r)
+    });
+
+    //一般data从后台返回，调用这个方法显示视图
+    $('#jstree_demo_div').jstree({'plugins':["checkbox"], 
+	'core' : {
+        'data' : [
+           { "id" : "id_1", "parent" : "#", "text" : "山东省",'state' : {  'selected' : false }, },
+           { "id" : "id_1_1", "parent" : "id_1", "text" : "济南市" ,'state' : {  'selected' : false },},
+           { "id" : "id_2", "parent" : "#", "text" : "河北省" ,'state' : {  'selected' : false },},
+           { "id" : "id_2_1", "parent" : "id_2", "text" : "石家庄" ,'state' : {  'selected' : false },},
+           { "id" : "id_2_2", "parent" : "id_2", "text" : "北京" ,'state' : {  'selected' : false },},
+        ]
+    } }); 
+	//显示选中的节点树 仅仅做模仿效果数据自己改状态即可
+	$('#jstree_demo_div2').jstree({'plugins':["checkbox"], 
+	'core' : {
+        'data' : [
+           { "id" : "id_1", "parent" : "#", "text" : "山东省",'state' : {  'selected' : true }, },
+           { "id" : "id_1_1", "parent" : "id_1", "text" : "济南市" ,'state' : {  'selected' : true },},
+           { "id" : "id_2", "parent" : "#", "text" : "河北省" ,'state' : {  'selected' : true },},
+           { "id" : "id_2_1", "parent" : "id_2", "text" : "石家庄" ,'state' : {  'selected' : false },},
+           { "id" : "id_2_2", "parent" : "id_2", "text" : "北京" ,'state' : {  'selected' : false },},
+        ]
+    } });
+</script>
+</html>

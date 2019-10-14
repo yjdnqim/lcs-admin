@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserLoginLogMapper">
+	<!-- 保存 -->
+	<insert id="save" parameterType="pd">
+		insert into WS_SYS_USER_LOGIN_LOG(
+			USER_ID     ,
+			LOGIN_IP    ,
+			LOGIN_TIME  ,
+			LOGIN_STATUS
+		) values (
+			#{USER_ID},
+			#{LOGIN_IP},
+			#{LOGIN_TIME},
+			#{LOGIN_STATUS}
+		)
+	</insert>
+
+	<!-- 查询最近5条 -->
+	<select id="listLatest5" parameterType="pd" resultType="pd">
+		select
+			ID,
+			USER_ID     ,
+			LOGIN_IP    ,
+			LOGIN_TIME  ,
+			LOGIN_STATUS
+		from 
+				WS_SYS_USER_LOGIN_LOG 
+		where USER_ID = #{USER_ID}
+		ORDER BY LOGIN_TIME DESC LIMIT 0,40
+	</select>
+	<select id="findCount" parameterType="pd" resultType="pd">
+		select
+			count(*) as COUNT
+		from 
+				WS_SYS_USER_LOGIN_LOG 
+		where USER_ID = #{USER_ID}
+	</select>
+</mapper>
