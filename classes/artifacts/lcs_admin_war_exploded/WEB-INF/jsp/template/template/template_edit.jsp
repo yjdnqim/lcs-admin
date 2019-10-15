@@ -15,22 +15,23 @@
 <body>
 
 <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+	<input type="hidden" name="TEMPLATE_ID" value="${pd.TEMPLATE_ID}">
 	<div class="layui-form-item">
 		<label class="layui-form-label">字段_String</label>
 		<div class="layui-input-inline">
-			<input type="text" name="FIELD_1" lay-verify="required" placeholder="请输入字段_String" autocomplete="off" class="layui-input">
+			<input type="text" name="FIELD_1" lay-verify="required" value="${pd.FIELD_1}" placeholder="请输入字段_String" autocomplete="off" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">字段_Int</label>
 		<div class="layui-input-inline">
-			<input type="text" name="FIELD_2" lay-verify="required" placeholder="请输入字段_Int" autocomplete="off" class="layui-input">
+			<input type="number" name="FIELD_2" lay-verify="number" value="${pd.FIELD_2}" placeholder="请输入字段_Int" autocomplete="off" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">字段_Date</label>
 		<div class="layui-input-inline">
-			<input type="text" id="FIELD_3" name="FIELD_3" lay-verify="required" placeholder="请输入字段_Date" autocomplete="off" class="layui-input">
+			<input type="text" id="FIELD_3" name="FIELD_3" value="${pd.FIELD_3}" lay-verify="date" placeholder="请输入字段_Date" autocomplete="off" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item layui-hide">
@@ -47,7 +48,7 @@
 	}).use(['index', 'form', 'laydate'], function(){
 		var form = layui.form, laydate = layui.laydate;
 		laydate.render({
-			elem: '#FIELD_3' //指定元素
+			elem: '#FIELD_3'
 		});
 	})
 

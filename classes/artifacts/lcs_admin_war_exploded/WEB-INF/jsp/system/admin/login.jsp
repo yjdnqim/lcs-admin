@@ -101,7 +101,7 @@
                     }else if("codeerror" == res.result){
                         layer.msg('验证码输入有误', {
                             offset: '15px'
-                            , icon: 1
+                            , icon: 2
                             , time: 1000
                         })
                     }else{

@@ -50,49 +50,61 @@ public class TemplateController extends BaseController {
 	 * 新增
 	 */
 	@RequestMapping(value="/save")
-	public ModelAndView save() throws Exception{
+	@ResponseBody
+	public Object save(){
 		logBefore(logger, "新增Template");
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
+		PageData resultPageData = new PageData();
+		PageData pd = this.getPageData();
 		pd.put("TEMPLATE_ID", this.get32UUID());	//主键
-		templateService.save(pd);
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
+		try {
+			templateService.save(pd);
+			resultPageData.put("code", 0);
+			resultPageData.put("message", "OK");
+		} catch (Exception e) {
+			resultPageData.put("code", -1);
+			resultPageData.put("message", e.getLocalizedMessage());
+		}
+		return AppUtil.returnObject(resultPageData, resultPageData);
 	}
 	
 	/**
 	 * 删除
 	 */
 	@RequestMapping(value="/delete")
-	public void delete(PrintWriter out){
+	@ResponseBody
+	public Object delete(){
 		logBefore(logger, "删除Template");
-		PageData pd = new PageData();
+		PageData resultPageData = new PageData();
+		PageData pd = this.getPageData();
 		try{
-			pd = this.getPageData();
 			templateService.delete(pd);
-			out.write("success");
-			out.close();
+			resultPageData.put("code", 0);
+			resultPageData.put("message", "OK");
 		} catch(Exception e){
-			logger.error(e.toString(), e);
+			resultPageData.put("code", -1);
+			resultPageData.put("message", e.getLocalizedMessage());
 		}
-		
+		return AppUtil.returnObject(resultPageData, resultPageData);
 	}
 	
 	/**
 	 * 修改
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
+	@ResponseBody
+	public Object edit(){
 		logBefore(logger, "修改Template");
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		templateService.edit(pd);
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
+		PageData resultPageData = new PageData();
+		PageData pd = this.getPageData();
+		try {
+			templateService.edit(pd);
+			resultPageData.put("code", 0);
+			resultPageData.put("message", "OK");
+		} catch (Exception e) {
+			resultPageData.put("code", -1);
+			resultPageData.put("message", e.getLocalizedMessage());
+		}
+		return AppUtil.returnObject(resultPageData, resultPageData);
 	}
 	
 	/**
@@ -105,10 +117,16 @@ public class TemplateController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			page.setPd(pd);
+
 			List<PageData>	varList = templateService.list(page);	//列出Template列表
 			mv.setViewName("template/template/template_list");
 			mv.addObject("varList", varList);
+
+			pd.put("totalCount", page.getTotalResult());
+			pd.put("pageCount", page.getShowCount());
+			pd.put("currentPage", page.getCurrentPage());
+			page.setPd(pd);
+
 			mv.addObject("pd", pd);
 			mv.addObject(Const.SESSION_QX,this.getHC());	//按钮权限
 		} catch(Exception e){
@@ -163,27 +181,29 @@ public class TemplateController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() {
 		logBefore(logger, "批量删除Template");
+		PageData resultPageData = new PageData();
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		try {
 			pd = this.getPageData();
-			List<PageData> pdList = new ArrayList<PageData>();
+
 			String DATA_IDS = pd.getString("DATA_IDS");
 			if(null != DATA_IDS && !"".equals(DATA_IDS)){
 				String ArrayDATA_IDS[] = DATA_IDS.split(",");
 				templateService.deleteAll(ArrayDATA_IDS);
-				pd.put("msg", "ok");
+				resultPageData.put("code", 0);
+				resultPageData.put("message", "OK");
 			}else{
-				pd.put("msg", "no");
+				resultPageData.put("code", -2);
+				resultPageData.put("message", "缺少参数");
 			}
-			pdList.add(pd);
-			map.put("list", pdList);
 		} catch (Exception e) {
-			logger.error(e.toString(), e);
+			resultPageData.put("code", -1);
+			resultPageData.put("message", e.getLocalizedMessage());
 		} finally {
 			logAfter(logger);
 		}
-		return AppUtil.returnObject(pd, map);
+		return AppUtil.returnObject(resultPageData, resultPageData);
 	}
 	
 	/*
