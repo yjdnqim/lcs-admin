@@ -1,4 +1,4 @@
-package com.fh.controller.template.template;
+package com.fh.controller.${packageName}.${objectNameLower};
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,19 +25,19 @@ import com.fh.util.AppUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.Const;
 import com.fh.util.PageData;
-import com.fh.service.template.template.TemplateService;
+import com.fh.service.${packageName}.${objectNameLower}.${objectName}Service;
 
 /** 
- * 类名称：TemplateController
+ * 类名称：${objectName}Controller
  * 创建人：Lcs-Admin
- * 创建时间：2019-10-14
+ * 创建时间：${nowDate?string("yyyy-MM-dd")}
  */
 @Controller
-@RequestMapping(value="/template")
-public class TemplateController extends BaseController {
+@RequestMapping(value="/${objectNameLower}")
+public class ${objectName}Controller extends BaseController {
 	
-	@Resource(name="templateService")
-	private TemplateService templateService;
+	@Resource(name="${objectNameLower}Service")
+	private ${objectName}Service ${objectNameLower}Service;
 	
 	/**
 	 * 新增
@@ -45,12 +45,22 @@ public class TemplateController extends BaseController {
 	@RequestMapping(value="/save")
 	@ResponseBody
 	public Object save(){
-		logBefore(logger, "新增Template");
+		logBefore(logger, "新增${objectName}");
 		PageData resultPageData = new PageData();
 		PageData pd = this.getPageData();
-		pd.put("TEMPLATE_ID", this.get32UUID());	//主键
+		pd.put("${objectNameUpper}_ID", this.get32UUID());	//主键
+<#list fieldList as var>
+	<#if var[3] == "否">
+		<#if var[1] == 'Date'>
+		pd.put("${var[0]}", Tools.date2Str(new Date()));	//${var[2]}
+		<#else>
+		pd.put("${var[0]}", "${var[4]?replace("无","")}");	//${var[2]}
+		</#if>
+	</#if>
+</#list>
+
 		try {
-			templateService.save(pd);
+			${objectNameLower}Service.save(pd);
 			resultPageData.put("code", 0);
 			resultPageData.put("message", "OK");
 		} catch (Exception e) {
@@ -66,11 +76,11 @@ public class TemplateController extends BaseController {
 	@RequestMapping(value="/delete")
 	@ResponseBody
 	public Object delete(){
-		logBefore(logger, "删除Template");
+		logBefore(logger, "删除${objectName}");
 		PageData resultPageData = new PageData();
 		PageData pd = this.getPageData();
 		try{
-			templateService.delete(pd);
+			${objectNameLower}Service.delete(pd);
 			resultPageData.put("code", 0);
 			resultPageData.put("message", "OK");
 		} catch(Exception e){
@@ -86,14 +96,14 @@ public class TemplateController extends BaseController {
 	@RequestMapping(value="/edit")
 	@ResponseBody
 	public Object edit(){
-		logBefore(logger, "修改Template");
+		logBefore(logger, "修改${objectName}");
 		PageData resultPageData = new PageData();
 		PageData pd = this.getPageData();
-		try {
-			templateService.edit(pd);
+		try{
+			${objectNameLower}Service.edit(pd);
 			resultPageData.put("code", 0);
 			resultPageData.put("message", "OK");
-		} catch (Exception e) {
+		} catch(Exception e){
 			resultPageData.put("code", -1);
 			resultPageData.put("message", e.getLocalizedMessage());
 		}
@@ -105,15 +115,14 @@ public class TemplateController extends BaseController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page){
-		logBefore(logger, "列表Template");
+		logBefore(logger, "列表${objectName}");
 		ModelAndView mv = this.getModelAndView();
 		try{
-
 			PageData pd = this.getPageData();
 			page.setPd(pd);
 
-			List<PageData>	varList = templateService.list(page);	//列出Template列表
-			mv.setViewName("template/template/template_list");
+			List<PageData>	varList = ${objectNameLower}Service.list(page);	//列出${objectName}列表
+			mv.setViewName("${packageName}/${objectNameLower}/${objectNameLower}_list");
 			mv.addObject("varList", varList);
 
 			pd.put("totalCount", page.getTotalResult());
@@ -132,12 +141,12 @@ public class TemplateController extends BaseController {
 	 */
 	@RequestMapping(value="/goAdd")
 	public ModelAndView goAdd(){
-		logBefore(logger, "去新增Template页面");
+		logBefore(logger, "去新增${objectName}页面");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try {
-			mv.setViewName("template/template/template_edit");
+			mv.setViewName("${packageName}/${objectNameLower}/${objectNameLower}_edit");
 			mv.addObject("msg", "save");
 			mv.addObject("pd", pd);
 		} catch (Exception e) {
@@ -151,13 +160,13 @@ public class TemplateController extends BaseController {
 	 */
 	@RequestMapping(value="/goEdit")
 	public ModelAndView goEdit(){
-		logBefore(logger, "去修改Template页面");
+		logBefore(logger, "去修改${objectName}页面");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try {
-			pd = templateService.findById(pd);	//根据ID读取
-			mv.setViewName("template/template/template_edit");
+			pd = ${objectNameLower}Service.findById(pd);	//根据ID读取
+			mv.setViewName("${packageName}/${objectNameLower}/${objectNameLower}_edit");
 			mv.addObject("msg", "edit");
 			mv.addObject("pd", pd);
 		} catch (Exception e) {
@@ -172,14 +181,14 @@ public class TemplateController extends BaseController {
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() {
-		logBefore(logger, "批量删除Template");
+		logBefore(logger, "批量删除${objectName}");
 		PageData resultPageData = new PageData();
 		try {
 			PageData pd = this.getPageData();
 			String DATA_IDS = pd.getString("DATA_IDS");
 			if(null != DATA_IDS && !"".equals(DATA_IDS)){
 				String ArrayDATA_IDS[] = DATA_IDS.split(",");
-				templateService.deleteAll(ArrayDATA_IDS);
+				${objectNameLower}Service.deleteAll(ArrayDATA_IDS);
 				resultPageData.put("code", 0);
 				resultPageData.put("message", "OK");
 			}else{
@@ -189,8 +198,6 @@ public class TemplateController extends BaseController {
 		} catch (Exception e) {
 			resultPageData.put("code", -1);
 			resultPageData.put("message", e.getLocalizedMessage());
-		} finally {
-			logAfter(logger);
 		}
 		return AppUtil.returnObject(resultPageData, resultPageData);
 	}
@@ -201,24 +208,28 @@ public class TemplateController extends BaseController {
 	 */
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel(){
-		logBefore(logger, "导出Template到excel");
+		logBefore(logger, "导出${objectName}到excel");
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
 			Map<String,Object> dataMap = new HashMap<String,Object>();
 			List<String> titles = new ArrayList<String>();
-			titles.add("字段_String");	//1
-			titles.add("字段_Int");	//2
-			titles.add("字段_Date");	//3
+	<#list fieldList as var>
+			titles.add("${var[2]}");	//${var_index+1}
+	</#list>
 			dataMap.put("titles", titles);
-			List<PageData> varOList = templateService.listAll(pd);
+			List<PageData> varOList = ${objectNameLower}Service.listAll(pd);
 			List<PageData> varList = new ArrayList<PageData>();
 			for(int i=0;i<varOList.size();i++){
 				PageData vpd = new PageData();
-				vpd.put("var1", varOList.get(i).getString("FIELD_1"));	//1
-				vpd.put("var2", varOList.get(i).get("FIELD_2").toString());	//2
-				vpd.put("var3", varOList.get(i).getString("FIELD_3"));	//3
+	<#list fieldList as var>
+			<#if var[1] == 'Integer'>
+				vpd.put("var${var_index+1}", varOList.get(i).get("${var[0]}").toString());	//${var_index+1}
+			<#else>
+				vpd.put("var${var_index+1}", varOList.get(i).getString("${var[0]}"));	//${var_index+1}
+			</#if>
+	</#list>
 				varList.add(vpd);
 			}
 			dataMap.put("varList", varList);

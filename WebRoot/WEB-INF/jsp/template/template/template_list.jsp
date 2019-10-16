@@ -34,7 +34,7 @@
 							</div>
 						</div>
 						<div class="layui-inline">
-							<button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-front-search">
+							<button class="layui-btn layuiadmin-action-btn" lay-submit lay-filter="LAY-front-search">
 								<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
 							</button>
 						</div>
@@ -46,18 +46,18 @@
 						<c:choose>
 							<c:when test="${not empty varList}">
 								<c:if test="${QX.del == 1 }">
-									<button class="layui-btn layui-btn-danger layuiadmin-btn-useradmin" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i>删除</button>
+									<button class="layui-btn layui-btn-danger layuiadmin-action-btn" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i>删除</button>
 								</c:if>
 								<c:if test="${QX.add == 1 }">
-									<button class="layui-btn layuiadmin-btn-useradmin" data-type="add"><i class="layui-icon layui-icon-add-circle"></i>添加</button>
+									<button class="layui-btn layuiadmin-action-btn" data-type="add"><i class="layui-icon layui-icon-add-circle"></i>添加</button>
 								</c:if>
 								<c:if test="${QX.cha == 1 }">
-									<button class="layui-btn layuiadmin-btn-useradmin" data-type="exportExcel"><i class="layui-icon layui-icon-export"></i>导出Excel</button>
+									<button class="layui-btn layuiadmin-action-btn" data-type="exportExcel"><i class="layui-icon layui-icon-export"></i>导出Excel</button>
 								</c:if>
 							</c:when>
 							<c:otherwise>
 								<c:if test="${QX.add == 1 }">
-									<button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+									<button class="layui-btn layuiadmin-action-btn" data-type="add">添加</button>
 								</c:if>
 							</c:otherwise>
 						</c:choose>
@@ -82,8 +82,8 @@
 								<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center' style="width: 30px;">${var.TEMPLATE_ID}</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<td>${var.TEMPLATE_ID}</td>
+											<td>${vs.index+1}</td>
 											<td>${var.FIELD_1}</td>
 											<td>${var.FIELD_2}</td>
 											<td>${var.FIELD_3}</td>
@@ -108,6 +108,7 @@
 					</table>
 					<div id="laypage"></div>
 					<script type="text/html" id="table-tr-action">
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="subpage"><i class="layui-icon layui-icon-list"></i>去下级页面</a>
 						<c:if test="${QX.edit == 1 }">
 							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
 						</c:if>
@@ -314,9 +315,13 @@
 						});
 					});
 				}
+
+				if("subpage" === e.event){
+					window.location.href='<%=basePath%>buildcodetest/list.do';
+				}
 			})
 
-			$('.layui-btn.layuiadmin-btn-useradmin').on('click', function () {
+			$('.layui-btn.layuiadmin-action-btn').on('click', function () {
 				var type = $(this).data('type');
 				active[type] ? active[type].call(this) : '';
 			});

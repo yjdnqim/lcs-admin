@@ -84,7 +84,7 @@ public class CreateCodeController extends BaseController {
 		String ftlPath = "createCode";								//ftl路径
 		
 		/*生成controller*/
-		Freemarker.printFile("controllerTemplate.ftl", root, "controller/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName+"Controller.java", filePath, ftlPath);
+		Freemarker.printFile("controllerLayUITemplate.ftl", root, "controller/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName+"Controller.java", filePath, ftlPath);
 		
 		/*生成service*/
 		Freemarker.printFile("serviceTemplate.ftl", root, "service/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName+"Service.java", filePath, ftlPath);
@@ -98,8 +98,8 @@ public class CreateCodeController extends BaseController {
 		Freemarker.printFile("oracle_SQL_Template.ftl", root, "oracle数据库脚本/"+tablePrefixName+"_"+objectName.toUpperCase()+".sql", filePath, ftlPath);
 		
 		/*生成jsp页面*/
-		Freemarker.printFile("jsp_list_Template.ftl", root, "jsp/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName.toLowerCase()+"_list.jsp", filePath, ftlPath);
-		Freemarker.printFile("jsp_edit_Template.ftl", root, "jsp/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName.toLowerCase()+"_edit.jsp", filePath, ftlPath);
+		Freemarker.printFile("jsp_list_layui_Template.ftl", root, "jsp/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName.toLowerCase()+"_list.jsp", filePath, ftlPath);
+		Freemarker.printFile("jsp_edit_layui_Template.ftl", root, "jsp/"+packageName+"/"+objectName.toLowerCase()+"/"+objectName.toLowerCase()+"_edit.jsp", filePath, ftlPath);
 		
 		/*生成说明文档*/
 		Freemarker.printFile("docTemplate.ftl", root, "说明.doc", filePath, ftlPath);
