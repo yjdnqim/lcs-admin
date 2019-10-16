@@ -63,6 +63,12 @@
 				a.TEMPLATE_ID
 		from 
 				TB_TEMPLATE a
+		<where>
+			<if test="pd.FIELD_1 != null and pd.FIELD_1 != ''">
+				and a.FIELD_1 LIKE CONCAT(CONCAT('%', #{pd.FIELD_1}), '%')
+			</if>
+		</where>
+		order by a.FIELD_3 desc
 	</select>
 	
 	<!-- 列表(全部) -->

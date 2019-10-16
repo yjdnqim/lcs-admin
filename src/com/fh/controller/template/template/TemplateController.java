@@ -114,9 +114,10 @@ public class TemplateController extends BaseController {
 	public ModelAndView list(Page page){
 		logBefore(logger, "列表Template");
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
 		try{
-			pd = this.getPageData();
+
+			PageData pd = this.getPageData();
+			page.setPd(pd);
 
 			List<PageData>	varList = templateService.list(page);	//列出Template列表
 			mv.setViewName("template/template/template_list");
@@ -125,8 +126,6 @@ public class TemplateController extends BaseController {
 			pd.put("totalCount", page.getTotalResult());
 			pd.put("pageCount", page.getShowCount());
 			pd.put("currentPage", page.getCurrentPage());
-			page.setPd(pd);
-
 			mv.addObject("pd", pd);
 			mv.addObject(Const.SESSION_QX,this.getHC());	//按钮权限
 		} catch(Exception e){

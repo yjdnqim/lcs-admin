@@ -35,7 +35,7 @@
 				</li>
 				<c:if test="${user.USERNAME == 'admin'}">
 					<li class="layui-nav-item" lay-unselect>
-						<a lay-href="menu.do" title="菜单管理">
+						<a lay-href="menu.do">
 							<i class="layui-icon layui-icon-menu-fill"></i>
 							菜单管理
 						</a>

@@ -20,19 +20,13 @@
 						<div class="layui-inline">
 							<label class="layui-form-label">搜索字段1</label>
 							<div class="layui-input-block">
-								<input type="text" name="SEARCH_FIELD_1" placeholder="请输入" autocomplete="off" class="layui-input">
+								<input type="text" id="FIELD_1" name="FIELD_1" value="${pd.FIELD_1}" placeholder="请输入" autocomplete="off" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-inline">
 							<label class="layui-form-label">搜索字段2</label>
 							<div class="layui-input-block">
-								<input type="text" name="SEARCH_FIELD_2" placeholder="请输入" autocomplete="off" class="layui-input">
-							</div>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label">搜索字段3</label>
-							<div class="layui-input-block">
-								<select name="SEARCH_FIELD_3">
+								<select name="SEARCH_FIELD_2">
 									<option value="0">请选择</option>
 									<option value="1">option1</option>
 									<option value="2">option2</option>
@@ -131,11 +125,12 @@
 			base: 'static/layuiadmin/' //静态资源所在路径
 		}).extend({
 			index: 'lib/index' //主入口模块
-		}).use(['index', 'table', 'laypage'], function () {
+		}).use(['index', 'table', 'laypage', 'common'], function () {
 			var $ = layui.$;
 			var form = layui.form;
 			var table = layui.table;
 			var laypage = layui.laypage;
+			var commonUtils = layui.common;
 
 			<c:choose>
 			<c:when test="${not empty varList}">
@@ -151,9 +146,13 @@
 				curr: ${pd.currentPage}, // 服务器端回传当前页,
 				layout: ['prev', 'page', 'next','limit','skip'],
 				jump: function(obj, first){
-
 					if(!first){
-						location.href='template/list.do?currentPage=' + obj.curr + '&showCount=' + obj.limit;
+						var pageParams = {
+							currentPage: obj.curr,
+							showCount: obj.limit,
+							FIELD_1: $("#FIELD_1").val()
+						}
+						commonUtils.redirectTo('template/list.do', pageParams);
 					}
 				}
 			});
@@ -165,7 +164,7 @@
 			form.on('submit(LAY-front-search)', function (data) {
 				var field = data.field;
 				//执行search
-				alert(JSON.stringify(field));
+				commonUtils.redirectTo('template/list.do', field);
 			});
 
 			//事件
